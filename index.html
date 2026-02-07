@@ -13,6 +13,45 @@
       box-sizing: border-box;
     }
 
+    /* Navigation Button */
+    .nav-rose {
+      position: absolute;
+      top: 32px;
+      right: 48px;
+      z-index: 2000;
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      color: #fff;
+      border: none;
+      border-radius: 22px 22px 22px 0;
+      padding: 10px 26px 10px 18px;
+      font-family: 'Pacifico', cursive;
+      font-size: 1.25rem;
+      box-shadow: 0 2px 12px #ffb6c1aa;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-rose:hover {
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      transform: scale(1.06) rotate(-2deg);
+    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine Proposal 💖</title>
+
+  <!-- Romantic Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico:wght@400&family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -296,6 +335,29 @@
 
 <body>
   <div class="valentine-viewport">
+    <!-- Moving Butterfly Navigation -->
+    <img src="butterfly.gif" id="butterfly-nav" alt="Butterfly" style="position:absolute; top:60px; right:60px; width:80px; height:80px; z-index:2000; cursor:pointer; transition:left 2.5s cubic-bezier(.4,1.6,.4,1),top 2.5s cubic-bezier(.4,1.6,.4,1),transform 2.5s;">
+      <script>
+        // Butterfly navigation movement
+        const butterfly = document.getElementById('butterfly-nav');
+        function moveButterflyNav() {
+          const padding = 20;
+          const bw = butterfly.offsetWidth;
+          const bh = butterfly.offsetHeight;
+          const maxW = window.innerWidth - bw - padding;
+          const maxH = window.innerHeight - bh - padding;
+          const left = Math.random() * maxW + padding/2;
+          const top = Math.random() * maxH + padding/2;
+          butterfly.style.left = left + 'px';
+          butterfly.style.top = top + 'px';
+          butterfly.style.transform = `rotate(${Math.random()*30-15}deg) scaleX(${Math.random()<0.5?-1:1})`;
+        }
+        setTimeout(moveButterflyNav, 1000);
+        setInterval(moveButterflyNav, 3500);
+        butterfly.addEventListener('click', function() {
+          window.location.href = 'rose.html';
+        });
+      </script>
     <div class="frame">
     <h1>Will you be my Valentine? 💘</h1>
     <p class="subtitle">A question from my heart to yours</p>

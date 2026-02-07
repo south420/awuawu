@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>A Rose For You 🌹</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+
+/* PAGE STYLE */
+
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(to bottom right,#ffb6c1,#ffe4e1);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+}
+
+/* TITLE */
+
+h1{
+  font-family:"Pacifico",cursive;
+  font-size:3rem;
+  color:white;
+  text-shadow:2px 2px 12px rgba(0,0,0,0.3);
+  margin-bottom:30px;
+}
+
+/* ROSE IMAGE */
+
+.rose-img{
+  width:300px;
+  max-width:80%;
+  z-index:2;
+}
+
+/* FALLING PETALS */
+
+.petal{
+  position:absolute;
+  top:-50px;
+  font-size:24px;
+  animation:fall linear infinite;
+  opacity:0.9;
+}
+
+@keyframes fall{
+
+  0%{
+    transform:translateY(-50px) rotate(0deg);
+  }
+
+  100%{
+    transform:translateY(110vh) rotate(360deg);
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>A rose for you ❤️</h1>
+
+<!-- YOUR ROSE IMAGE -->
+<img src="rose.png" class="rose-img" alt="Rose">
+
+<script>
+
+/* CREATE FALLING PETALS */
+
+const numberOfPetals = 25;
+
+for(let i=0;i<numberOfPetals;i++){
+
+  const petal = document.createElement("div");
+
+  petal.className="petal";
+  petal.innerHTML="🌸";
+
+  petal.style.left=Math.random()*100+"vw";
+  petal.style.animationDuration=(5+Math.random()*5)+"s";
+  petal.style.fontSize=(20+Math.random()*20)+"px";
+
+  document.body.appendChild(petal);
+}
+
+</script>
+
+</body>
+</html>
