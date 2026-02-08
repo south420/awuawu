@@ -51,6 +51,35 @@
     * {
       box-sizing: border-box;
     }
+/* ===== Top Right Proposal Button ===== */
+
+.propose-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+
+  font-family: "Pacifico", cursive;
+  font-size: 18px;
+
+  padding: 12px 22px;
+  border-radius: 30px;
+
+  text-decoration: none;
+  color: white;
+
+  background: linear-gradient(45deg, #ff4d6d, #ff758f);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+
+.propose-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
 
     body {
       margin: 0;
@@ -332,6 +361,10 @@
     }
   </style>
 </head>
+<!-- Top Right Proposal Button -->
+<a href="propose.html" class="propose-btn">
+  💖 Special Surprise
+</a>
 
 <body>
   <div class="valentine-viewport">
