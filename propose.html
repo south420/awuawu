@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propose Day It Is!!!</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg,#ffd1dc,#ffe6f0);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  width:90%;
+  max-width:600px;
+  background:white;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  text-align:center;
+}
+
+h1{
+  margin-top:0;
+  color:#ff4d6d;
+}
+
+.meter-label{
+  font-weight:bold;
+  color:#ff4d6d;
+  margin-bottom:10px;
+}
+
+/* LOVE METER */
+
+.love-meter{
+  height:16px;
+  background:#ffe6ee;
+  border-radius:20px;
+  overflow:hidden;
+  margin-bottom:25px;
+}
+
+.love-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff4d6d,#ff85a2);
+  transition:width 0.6s ease;
+}
+
+/* QUESTIONS */
+
+.question{
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.5s ease;
+  display:none;
+}
+
+.question.active{
+  opacity:1;
+  transform:translateY(0);
+  display:block;
+}
+
+.option{
+  display:block;
+  margin:10px auto;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  width:80%;
+  background:#ffe6ee;
+  cursor:pointer;
+  font-size:16px;
+  transition:0.3s;
+}
+
+.option:hover{
+  background:#ffd1dc;
+  transform:scale(1.05);
+}
+
+.feedback{
+  color:#ff4d6d;
+  font-size:14px;
+  height:20px;
+}
+
+.round-text{
+  font-size:30px;
+  color:#ff4d6d;
+  font-weight:bold;
+  letter-spacing:2px;
+  margin:20px;
+  display:none;
+}
+
+.final{
+  display:none;
+}
+
+.big-message{
+  font-size:42px;
+  color:#ff4d6d;
+  font-weight:bold;
+  animation:pulse 1s infinite alternate;
+}
+
+@keyframes pulse{
+  from{transform:scale(1)}
+  to{transform:scale(1.05)}
+}
+
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  top:-10px;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Propose Day It Is!!!</h1>
+
+<div class="meter-label">Fill up the love meter ❤️</div>
+
+<div class="love-meter">
+  <div class="love-fill" id="loveFill"></div>
+</div>
+
+<div id="quiz"></div>
+<div class="round-text" id="roundText"></div>
+
+<div class="final" id="finalPage">
+  <img src="lovemeter.gif" width="200">
+  <div class="big-message">Best Gorlfurend Evor!!</div>
+</div>
+
+</div>
+
+<script>
+
+/* QUESTIONS */
+
+const questions = [
+
+{
+q:"What was the name of the movie that we watched together for the first time?",
+options:["Kimi no na wa","the girl who leapt through time","I want to eat your pancreas","koe no katachi"],
+correct:"the girl who leapt through time"
+},
+
+{
+q:"What part of your body do I love the most?",
+options:["Your Hair","Your waist","Your Eyes","You"],
+correct:"You"
+},
+
+{
+q:"When did I come to Mumbai for the first time to meet you?",
+options:["March 14th","March 10th","February 14th","May 4th"],
+correct:"March 14th"
+},
+
+{
+q:"Why is baby so cute??",
+options:["cause she short","cause she cuddly","cause she squishy","All of the above"],
+correct:"All of the above"
+},
+
+{
+q:"Does baby love me?",
+options:["no","no","no","no"],
+correct:"yes",
+hoverTransform:true
+},
+
+{
+q:"Will baby be with me 4evahh?",
+options:["yes","no","idk","aw hell no!"],
+correct:"yes",
+retry:true
+}
+
+];
+
+/* STATE */
+
+let index=0;
+let love=0;
+let round2Shown=false;
+
+const increment=100/questions.length;
+
+const quiz=document.getElementById("quiz");
+const loveFill=document.getElementById("loveFill");
+
+/* RENDER */
+
+function renderQuestion(){
+
+  if(index===3 && !round2Shown){
+    round2Shown=true;
+    showRound2();
+    return;
+  }
+
+  const data=questions[index];
+
+  quiz.innerHTML="";
+
+  const div=document.createElement("div");
+  div.className="question active";
+
+  const q=document.createElement("h3");
+  q.textContent=data.q;
+  div.appendChild(q);
+
+  const feedback=document.createElement("div");
+  feedback.className="feedback";
+
+  data.options.forEach(opt=>{
+
+    const btn=document.createElement("button");
+    btn.className="option";
+    btn.textContent=opt;
+
+    if(data.hoverTransform){
+      btn.addEventListener("mouseenter",()=>btn.textContent="yes");
+    }
+
+    btn.onclick=()=>{
+
+      if(btn.textContent===data.correct){
+        correctAnswer();
+      }else{
+        if(data.retry){
+          feedback.textContent="please? think about it again!";
+        }else{
+          feedback.textContent="hehe nope 😛";
+        }
+      }
+
+    };
+
+    div.appendChild(btn);
+  });
+
+  div.appendChild(feedback);
+
+  quiz.appendChild(div);
+}
+
+function correctAnswer(){
+
+  love+=increment;
+  loveFill.style.width=love+"%";
+  index++;
+
+  if(index>=questions.length){
+    setTimeout(finalSequence,800);
+  }else{
+    setTimeout(renderQuestion,600);
+  }
+}
+
+/* ROUND 2 */
+
+function showRound2(){
+
+  quiz.innerHTML="";
+  const text=document.getElementById("roundText");
+
+  text.style.display="block";
+  text.innerHTML="";
+
+  const message="Round 2!!!";
+  let i=0;
+
+  const interval=setInterval(()=>{
+
+    text.innerHTML+=message[i];
+    i++;
+
+    if(i>=message.length){
+      clearInterval(interval);
+
+      setTimeout(()=>{
+        text.style.display="none";
+        renderQuestion();
+      },1200);
+    }
+
+  },120);
+}
+
+/* FINAL */
+
+function finalSequence(){
+
+  quiz.innerHTML="";
+  document.getElementById("finalPage").style.display="block";
+
+  setTimeout(startConfetti,5000);
+}
+
+function startConfetti(){
+
+  for(let i=0;i<120;i++){
+
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.animationDuration=(Math.random()*3+2)+"s";
+    c.style.background=`hsl(${Math.random()*360},70%,60%)`;
+
+    document.body.appendChild(c);
+
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+
+renderQuestion();
+
+</script>
+
+</body>
+</html>
