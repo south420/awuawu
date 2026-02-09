@@ -359,6 +359,28 @@
         position: static !important;
       }
     }
+    .choco-btn{
+    position:fixed;
+    top:20px;
+    left:20px;
+    padding:10px 18px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(135deg,#ff8fa3,#ff4d6d);
+    color:white;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(0,0,0,0.3);
+    transition:all .3s ease;
+    z-index:999;
+}
+
+.choco-btn:hover{
+    transform:translateY(-2px) scale(1.05);
+    box-shadow:0 10px 20px rgba(0,0,0,0.4);
+}
+
   </style>
 </head>
 <!-- Top Right Proposal Button -->
@@ -367,6 +389,8 @@
 </a>
 
 <body>
+  <button class="choco-btn" onclick="goToChocolate()">🍫 Chocolate Day</button>
+
   <div class="valentine-viewport">
     <!-- Moving Butterfly Navigation -->
     <img src="butterfly.gif" id="butterfly-nav" alt="Butterfly" style="position:absolute; top:60px; right:60px; width:80px; height:80px; z-index:2000; cursor:pointer; transition:left 2.5s cubic-bezier(.4,1.6,.4,1),top 2.5s cubic-bezier(.4,1.6,.4,1),transform 2.5s;">
@@ -463,6 +487,9 @@
     yesBtn.addEventListener("click", () => {
       window.location.href = "video.html";
     });
+    function goToChocolate(){
+    window.location.href = "chocolate.html";
+}
   </script>
 
 </body>
