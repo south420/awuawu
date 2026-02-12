@@ -381,6 +381,28 @@
     box-shadow:0 10px 20px rgba(0,0,0,0.4);
 }
 
+.hug-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: linear-gradient(135deg, #ff6fa5, #ff9ac1);
+    color: white;
+    text-decoration: none;
+    padding: 14px 22px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+/* Hover animation */
+.hug-button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
   </style>
 </head>
 <!-- Top Right Proposal Button -->
@@ -438,6 +460,7 @@
 
       </div>
       </div>
+<a href="hug.html" class="hug-button">💖 Hug Me!</a>
 
   <script>
     const noBtn = document.getElementById("noBtn");
@@ -490,7 +513,9 @@
     function goToChocolate(){
     window.location.href = "chocolate.html";
 }
+
   </script>
+
 
 </body>
 </html>
