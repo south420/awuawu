@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Hug Day ❤️</title>
+
+<style>
+
+/* =============================
+   GLOBAL
+============================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  user-select:none;
+}
+
+body{
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg,#ffd6e8,#ffeef5);
+  overflow:hidden;
+}
+
+/* =============================
+   MAIN STAGE
+============================= */
+
+#stage{
+  position:relative;
+  height:100vh;
+  width:100vw;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* slider track */
+.track{
+  position:absolute;
+  width:80%;
+  height:6px;
+  background:rgba(255,255,255,0.6);
+  border-radius:10px;
+}
+
+/* characters */
+
+.character{
+  position:absolute;
+  bottom:calc(50% - 234px); /* center vertically using half height */
+  height:468px;
+  pointer-events:none;
+  transition: transform .4s ease;
+}
+
+.character img{
+  height:100%;
+  pointer-events:none;
+  -webkit-user-drag:none;
+}
+
+/* draggable handles */
+
+.handle{
+  position:absolute;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  background:white;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+  cursor:grab;
+  top:50%;
+  transform:translate(-50%,-50%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.handle:active{
+  cursor:grabbing;
+}
+
+/* =============================
+   SUCCESS PAGE
+============================= */
+
+#success{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#ffc6da,#fff0f6);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 1s ease;
+}
+
+#success.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.title{
+  font-size:3rem;
+  color:#d6336c;
+  margin-bottom:20px;
+}
+
+.hug-photo{
+  max-width:400px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  margin-bottom:50px;
+}
+
+/* =============================
+   MEMORY GRID
+============================= */
+
+.memory-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:20px;
+  width:80%;
+  max-width:900px;
+}
+
+.memory{
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  transform:scale(.5);
+  opacity:0;
+  transition:all .8s cubic-bezier(.2,.8,.2,1);
+}
+
+.memory.show{
+  transform:scale(1);
+  opacity:1;
+}
+
+.memory img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+  <div class="track"></div>
+
+  <!-- LEFT CHARACTER -->
+  <div id="manChar" class="character">
+    <img src="man.png">
+  </div>
+
+  <!-- RIGHT CHARACTER -->
+  <div id="womanChar" class="character">
+    <img src="woman.png">
+  </div>
+
+  <div id="leftHandle" class="handle"></div>
+  <div id="rightHandle" class="handle"></div>
+
+</div>
+
+
+<!-- SUCCESS SCREEN -->
+
+<div id="success">
+
+<h1 class="title">Happy Hug Day Babyy ❤️</h1>
+
+<!-- Replace with your real hug image -->
+<img class="hug-photo" src="hug-photo.jpg">
+
+<div class="memory-grid" id="memoryGrid">
+
+<!-- Replace images month-wise -->
+<div class="memory"><img src="jan.jpg"></div>
+<div class="memory"><img src="feb.jpg"></div>
+<div class="memory"><img src="mar.jpg"></div>
+<div class="memory"><img src="apr.gif"></div>
+<div class="memory"><img src="may.jpg"></div>
+<div class="memory"><img src="jun.jpg"></div>
+<div class="memory"><img src="jul.jpg"></div>
+<div class="memory"><img src="aug.jpg"></div>
+<div class="memory"><img src="sep.jpg"></div>
+<div class="memory"><img src="oct.jpg"></div>
+<div class="memory"><img src="nov.jpg"></div>
+<div class="memory"><img src="dec.jpg"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =============================
+   CONFIG
+============================= */
+
+const MAN_WIDTH = 216;
+const WOMAN_WIDTH = 295;
+
+const stage = document.getElementById("stage");
+const man = document.getElementById("manChar");
+const woman = document.getElementById("womanChar");
+
+const leftHandle = document.getElementById("leftHandle");
+const rightHandle = document.getElementById("rightHandle");
+
+let stageWidth = window.innerWidth;
+
+let leftPos = 80;
+let rightPos = stageWidth - 80;
+
+leftHandle.style.left = leftPos+"px";
+rightHandle.style.left = rightPos+"px";
+
+updateCharacters();
+
+let dragging = null;
+
+/* =============================
+   DRAGGING
+============================= */
+
+document.addEventListener("pointerdown", e=>{
+  if(e.target===leftHandle) dragging="left";
+  if(e.target===rightHandle) dragging="right";
+});
+
+document.addEventListener("pointerup", ()=> dragging=null);
+
+document.addEventListener("pointermove", e=>{
+
+  if(!dragging) return;
+
+  const rect = stage.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+
+  if(dragging==="left"){
+    leftPos = Math.max(40, Math.min(x, rightPos - (MAN_WIDTH+WOMAN_WIDTH)/2));
+  }
+
+  if(dragging==="right"){
+    rightPos = Math.min(stageWidth-40, Math.max(x, leftPos + (MAN_WIDTH+WOMAN_WIDTH)/2));
+  }
+
+  leftHandle.style.left = leftPos+"px";
+  rightHandle.style.left = rightPos+"px";
+
+  updateCharacters();
+  checkCollision();
+
+});
+
+/* =============================
+   UPDATE CHARACTER POSITIONS
+============================= */
+
+function updateCharacters(){
+
+  man.style.left = (leftPos - MAN_WIDTH/2) + "px";
+  woman.style.left = (rightPos - WOMAN_WIDTH/2) + "px";
+
+}
+
+/* =============================
+   COLLISION DETECTION
+============================= */
+
+let hugged=false;
+
+function checkCollision(){
+
+  if(hugged) return;
+
+  const manRect = man.getBoundingClientRect();
+  const womanRect = woman.getBoundingClientRect();
+
+  const touching = Math.abs(manRect.right - womanRect.left) <= 1;
+
+  if(touching){
+    hugged=true;
+    triggerSuccess();
+  }
+}
+
+/* =============================
+   SUCCESS TRANSITION
+============================= */
+
+function triggerSuccess(){
+
+  leftHandle.style.pointerEvents="none";
+  rightHandle.style.pointerEvents="none";
+
+  man.style.transform="scale(1.05)";
+  woman.style.transform="scale(1.05)";
+
+  setTimeout(()=>{
+    document.getElementById("success").classList.add("show");
+    startMemoryAnimation();
+  },700);
+}
+
+/* =============================
+   MEMORY GRID ANIMATION
+============================= */
+
+function startMemoryAnimation(){
+
+  const memories = document.querySelectorAll(".memory");
+
+  memories.forEach((m,i)=>{
+    setTimeout(()=>{
+      m.classList.add("show");
+    }, i*300); // stagger timing
+  });
+
+}
+
+</script>
+
+</body>
+</html>

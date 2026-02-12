@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teddy Day Surprise 🧸</title>
+
+<style>
+
+/* =====================
+   GLOBAL STYLE
+===================== */
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ffe4ec,#ffd6e0);
+    font-family:Poppins, sans-serif;
+    overflow:hidden;
+}
+
+/* =====================
+   DOOR CONTAINER
+===================== */
+
+.scene{
+    perspective:1200px;
+}
+
+.door{
+    width:200px;
+    height:350px;
+    background:linear-gradient(145deg,#8b4513,#5a2e0e);
+    border-radius:8px;
+    position:relative;
+    transform-origin:left center;
+    transition:transform 1s ease;
+    cursor:pointer;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+.door.open{
+    transform:rotateY(-110deg);
+}
+
+/* Door knob */
+
+.door::after{
+    content:"";
+    position:absolute;
+    right:20px;
+    top:50%;
+    width:12px;
+    height:12px;
+    background:gold;
+    border-radius:50%;
+}
+
+/* =====================
+   PLUSHIE
+===================== */
+
+.plush{
+    position:absolute;
+    width:250px;
+    opacity:0;
+    transform:scale(0.8);
+    transition:all 1s ease;
+}
+
+.plush.show{
+    opacity:1;
+    transform:scale(1);
+}
+
+/* =====================
+   MESSAGE
+===================== */
+
+.message{
+    position:fixed;
+    bottom:50px;
+    font-size:32px;
+    color:#ff4d6d;
+    opacity:0;
+    transition:opacity 1s ease;
+}
+
+.message.show{
+    opacity:1;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+
+    <!-- Plush image (replace filename with your elephant plush image) -->
+    <img src="elephant.png" class="plush" id="plush">
+
+    <div class="door" id="door"></div>
+
+</div>
+
+<div class="message" id="message">
+    ❤️ check your door ❤️
+</div>
+
+<script>
+
+const door = document.getElementById("door");
+const plush = document.getElementById("plush");
+const message = document.getElementById("message");
+
+let opened = false;
+
+door.addEventListener("click", ()=>{
+
+    if(opened) return;
+    opened = true;
+
+    // Open door animation
+    door.classList.add("open");
+
+    // Reveal plush after door opens
+    setTimeout(()=>{
+        plush.classList.add("show");
+    },700);
+
+    // Show message after 5 seconds
+    setTimeout(()=>{
+        message.classList.add("show");
+    },5000);
+
+});
+
+</script>
+
+</body>
+</html>
