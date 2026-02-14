@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Yes ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+ margin:0;
+ background:black;
+ font-family:'Poppins',sans-serif;
+ color:white;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ height:100vh;
+ overflow:hidden;
+}
+
+/* MESSAGE */
+
+.message{
+ font-size:28px;
+ text-align:center;
+ max-width:700px;
+ line-height:1.6;
+
+ opacity:0;
+ transform:translateY(20px);
+ transition:all 2s ease;
+}
+
+/* VIDEO */
+
+.video-frame{
+ margin-top:40px;
+ border:4px solid white;
+ padding:12px;
+ border-radius:14px;
+ box-shadow:0 0 40px rgba(255,80,120,0.5);
+
+ opacity:0;
+ transform:scale(.95);
+ transition:all 2s ease;
+}
+
+video{
+width:500px;
+max-width:90%;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="message" class="message">
+You said yes... ❤️<br><br>
+And honestly, I would choose you again — in every lifetime.
+</div>
+
+<div id="videoContainer" class="video-frame">
+
+<video id="yesVideo" muted playsinline controls>
+<source src="final.mp4" type="video/mp4">
+</video>
+
+</div>
+
+<script>
+
+const message = document.getElementById("message");
+const videoContainer = document.getElementById("videoContainer");
+const video = document.getElementById("yesVideo");
+
+/* STEP 1 — Show message first */
+
+setTimeout(()=>{
+ message.style.opacity = 1;
+ message.style.transform = "translateY(0)";
+},500);
+
+/* STEP 2 — After emotional pause, reveal video */
+
+setTimeout(()=>{
+
+ videoContainer.style.opacity = 1;
+ videoContainer.style.transform = "scale(1)";
+
+ video.play().catch(()=>{});
+
+},4000);
+
+</script>
+
+</body>
+</html>

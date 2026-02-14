@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Valentine</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ================= GLOBAL ================= */
+
+body{
+ margin:0;
+ background:black;
+ color:white;
+ font-family:'Poppins',sans-serif;
+ overflow:hidden;
+}
+
+.scene{
+ position:fixed;
+ inset:0;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ flex-direction:column;
+ opacity:0;
+ pointer-events:none;
+ transition:opacity 1s;
+}
+
+.scene.active{
+ opacity:1;
+ pointer-events:auto;
+}
+
+/* ================= POKEMON DIALOGUE ================= */
+.dialogue-box{
+ position:absolute;
+ bottom%;
+ width:85%;
+ max-width:720px;
+
+ background:#e8e8e8;
+ border:4px solid #6b8ec6;
+ border-radius:18px;
+
+ padding:32px 36px;
+
+ font-family:'Press Start 2P', monospace;
+
+ font-size:15px;           /* slightly smaller = better readability */
+ line-height:2.2;          /* 👈 BIGGEST FIX */
+ letter-spacing:2px;       /* 👈 pixel spacing like Pokémon */
+
+ color:#2c3e8f;
+
+ white-space:pre-wrap;     /* keeps proper wrapping */
+
+ box-shadow:
+ inset 0 0 0 4px #ffffff,
+ 0 0 20px rgba(0,0,0,0.4);
+}
+
+
+#dialogueArrow{
+ float:right;
+ animation:blink 1s infinite;
+}
+
+@keyframes blink{
+ 0%,100%{opacity:1;}
+ 50%{opacity:0;}
+}
+
+/* glitch */
+.glitch{animation:glitch 0.4s;}
+@keyframes glitch{
+ 0%{transform:translateX(0)}
+ 25%{transform:translateX(-10px)}
+ 50%{transform:translateX(10px)}
+ 75%{transform:translateX(-5px)}
+ 100%{transform:translateX(0)}
+}
+
+/* TITLE */
+
+.title{
+ font-size:28px;
+ text-align:center;
+ max-width:800px;
+ line-height:1.6;
+}
+
+/* HEART */
+
+.heart{
+ font-size:80px;
+ cursor:pointer;
+}
+.beat{animation:beat .6s infinite;}
+@keyframes beat{
+ 50%{transform:scale(1.2);}
+}
+
+/* VIDEO */
+
+.video-frame{
+ border:4px solid white;
+ padding:12px;
+ box-shadow:0 0 30px rgba(255,80,100,0.5);
+ border-radius:12px;
+ background:black;
+}
+
+video{
+ width:700px;          /* fixed cinematic size */
+ max-width:85vw;       /* responsive */
+ height:auto;
+ border-radius:8px;
+}
+
+
+button{
+ padding:14px 28px;
+ font-size:20px;
+ cursor:pointer;
+ border:none;
+ border-radius:12px;
+ background:#ff4d6d;
+ color:white;
+}
+
+/*YES NO container*/
+#choiceContainer{
+ opacity:0;
+ transition:opacity 1s ease;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= SCENE 1 ================= -->
+
+<div id="scene1" class="scene active">
+<div class="dialogue-box">
+<span id="dialogueText"></span>
+<span id="dialogueArrow">▼</span>
+</div>
+</div>
+
+<!-- ================= SCENE 2 REVEAL ================= -->
+
+<div id="scene2" class="scene">
+<img src="reveal.png" width="300">
+<div style="margin-top:20px;font-size:22px;">amBvert: babyyyyy!!</div>
+</div>
+
+<!-- ================= SCENE 3 TITLE ================= -->
+
+<div id="scene3" class="scene">
+<div class="title">
+our hearts will always find each other, no matter what, we simply need to try harder with more hope each time
+</div>
+</div>
+
+<!-- ================= SCENE 4 HEART ================= -->
+
+<div id="scene4" class="scene">
+<div id="heart" class="heart">❤️</div>
+<div id="heartText"></div>
+<div id="countdown"></div>
+</div>
+
+<!-- ================= SCENE 5 VIDEO ================= -->
+
+<div id="scene5" class="scene">
+<div class="video-frame">
+<video id="mainVideo" controls>
+<source src="video.mp4">
+</video>
+</div>
+</div>
+
+<!-- ================= SCENE 6 MESSAGE ================= -->
+
+<div id="scene6" class="scene">
+<div id="messageText" class="title"></div>
+<div style="margin-top:30px;display:flex;gap:40px;" id="choiceContainer">
+<button id="yesBtn">YES</button>
+<button id="noBtn">NO</button>
+</div>
+</div>
+
+<script>
+
+/* SCENE SWITCH */
+
+function showScene(id){
+ document.querySelectorAll(".scene").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+}
+
+/* ================= DIALOGUE ================= */
+
+const dialogue=[
+"south: hmm...I wonder where she is...",
+"amBvert: baby I'm in channel 3",
+"south: oh okay baby..let me switch then.",
+"amBvert: Otay!",
+"*switches channel — screen glitch effect*",
+"south: baby? where are you??",
+"amBvert: baby I'm in channel 3",
+"south: ugh they put me in channel 1 again",
+"amBvert: I think they're keeping us apart intentionally bebaa",
+"south: ugh, let me switch again,",
+"amBvert: Otay!",
+"*switches channel — screen glitch effect*",
+"amBvert: baby? did you switch?",
+"south: yes baby",
+"amBvert: I can't see you baby...",
+"south: look behind baby!"
+];
+
+let index=0,isTyping=false,typingInterval;
+const textEl=document.getElementById("dialogueText");
+
+function typeWriter(text){
+ isTyping=true;
+ textEl.innerText="";
+ let i=0;
+ typingInterval=setInterval(()=>{
+  textEl.innerText+=text.charAt(i);
+  i++;
+  if(i>=text.length){
+   clearInterval(typingInterval);
+   isTyping=false;
+  }
+ },30);
+}
+
+function nextDialogue(){
+
+ if(isTyping){
+  clearInterval(typingInterval);
+  textEl.innerText=dialogue[index-1];
+  isTyping=false;
+  return;
+ }
+
+ if(index>=dialogue.length){
+   startReveal();
+   return;
+ }
+
+ const line=dialogue[index];
+
+ if(line.includes("glitch")){
+  document.body.classList.add("glitch");
+  setTimeout(()=>document.body.classList.remove("glitch"),400);
+ }
+
+ typeWriter(line);
+ index++;
+}
+
+document.addEventListener("click",()=>{
+ if(document.getElementById("scene1").classList.contains("active")){
+  nextDialogue();
+ }
+});
+
+nextDialogue();
+
+/* ================= REVEAL ================= */
+
+function startReveal(){
+ showScene("scene2");
+
+ setTimeout(()=>{
+  showScene("scene3");
+  setTimeout(startHeart,6000);
+ },4000);
+}
+
+/* ================= HEART ================= */
+
+const heart=document.getElementById("heart");
+const heartText=document.getElementById("heartText");
+const countdown=document.getElementById("countdown");
+
+let clicks=0,holding=false;
+
+function startHeart(){
+ showScene("scene4");
+}
+
+heart.onclick=()=>{
+ clicks++;
+
+ if(clicks===1){
+  setTimeout(()=>{
+   heart.classList.add("beat");
+   heartText.innerText="make my heart beat";
+  },1000);
+ }
+
+ if(clicks===5){
+  heartText.innerText="I feel better";
+  setTimeout(()=>heartText.innerText="thank you for saving me!",2000);
+  setTimeout(()=>heartText.innerText="hold me",4000);
+ }
+};
+
+heart.onmousedown=()=>{
+ if(clicks<5)return;
+ let time=5;
+ holding=true;
+ countdown.innerText=time;
+
+ const timer=setInterval(()=>{
+  if(!holding){clearInterval(timer);return;}
+  time--;
+  countdown.innerText=time;
+  if(time<=0){
+   clearInterval(timer);
+   startVideo();
+  }
+ },1000);
+};
+
+document.onmouseup=()=>holding=false;
+
+/* ================= VIDEO ================= */
+
+function startVideo(){
+ showScene("scene5");
+ const vid=document.getElementById("mainVideo");
+ vid.play();
+ vid.onended=startMessage;
+}
+
+/* ================= MESSAGE ================= */
+
+const lines=[
+"I've loved you before...",
+"I'll love you tomorrow...",
+"I can't explain how, but...",
+"Maybe we were lovers in past lives too.",
+"So... if I'm not asking for too much...",
+"Will you be my partner in the lives to come?"
+];
+function startMessage(){
+ showScene("scene6");
+
+ let i=0;
+ const box=document.getElementById("messageText");
+ const choices=document.getElementById("choiceContainer");
+
+ function next(){
+
+  if(i>=lines.length){
+    setTimeout(()=>{
+      choices.style.opacity=1;   // 👈 show buttons AFTER text ends
+    },1500);
+    return;
+  }
+
+  box.style.opacity=0;
+
+  setTimeout(()=>{
+    box.innerText=lines[i];
+    box.style.opacity=1;
+    i++;
+    setTimeout(next,3500);
+  },800);
+ }
+
+ next();
+}
+
+
+/* ================= ENDING ================= */
+
+document.getElementById("yesBtn").onclick=()=>{
+ window.location.href="yes.html";
+};
+
+const noBtn=document.getElementById("noBtn");
+
+noBtn.onmouseover=()=>{
+ const x=Math.random()*window.innerWidth*0.8;
+ const y=Math.random()*window.innerHeight*0.8;
+ noBtn.style.position="absolute";
+ noBtn.style.left=x+"px";
+ noBtn.style.top=y+"px";
+};
+
+</script>
+</body>
+</html>
